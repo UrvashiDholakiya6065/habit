@@ -1,27 +1,29 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class Habit {
-  final int id;
+  final int? id;
   final String name;
-  final IconData? icon;
-  final Color color;
+  final int icon;
+  final int color;
   final int streak;
-  final bool isCheck;
-  final String frequency; // weekly or monthly .......................
+   int isCheck;
+  final String iconFontFamily;
+  final String frequency;
   final DateTime? startDate;
   final DateTime? endDate;
+  final DateTime? selectedDate;
 
   Habit({
-    this.id = 0,
+    this.id,
      this.name="",
-     this.icon,
-     this.color=Colors.red,
+     this.icon=0,
+     this.color=0,
      this.streak=0,
      this.frequency="",
      this.startDate,
+    this.iconFontFamily="",
      this.endDate,
-     this.isCheck=false
+    this.isCheck=0,
+    this.selectedDate
   });
 
   factory Habit.fromMap(Map<String, dynamic> map) {
@@ -29,11 +31,12 @@ class Habit {
       id: map['id'],
       name: map['name'],
       icon: map['icon'],
-      color: Color(map['color']),
+      color: map['color'],
       frequency: map['frequency'],
-      startDate: DateTime.parse(map['start_date']),
-      endDate: map['end_Date'],
-      streak: map['streak'], isCheck: map['isCheck'],
+      iconFontFamily: map['iconFontFamily'],
+      startDate: map['start_Date'] != null ? DateTime.parse(map['start_Date']) : null,
+      endDate: map['end_Date'] != null ? DateTime.parse(map['end_Date']) : null,
+      streak: map['streak'], isCheck: map['isCheck'],selectedDate:  map['selectedDate'] != null ? DateTime.parse(map['selectedDate']) : null,
     );
   }
 
@@ -44,10 +47,48 @@ class Habit {
       'icon': icon,
       'color': color,
       'frequency': frequency,
-      'start_date': startDate?.toIso8601String(),
-      'end_Date': endDate,
+      'start_date': startDate.toString(),
+      'end_Date': endDate.toString(),
       'streak': streak,
-      'isCheck':isCheck
+      'isCheck':isCheck,
+      'selectedDate':selectedDate.toString(),
+      'iconFontFamily':iconFontFamily
     };
+  }
+}
+
+class HabitCompletion {
+  int? id;
+  int? habitId;
+  String? date;
+  int streak;
+  int isCheck;
+
+  HabitCompletion({
+    this.id,
+     this.habitId,
+     this.date,
+    this.streak=0,
+     this.isCheck=0,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'habit_id': habitId,
+      'date': date,
+      'streak':streak,
+      'isCheck': isCheck,
+    };
+  }
+
+  factory HabitCompletion.fromMap(Map<String, dynamic> map) {
+    return HabitCompletion(
+      id: map['id'],
+      habitId: map['habit_id'],
+      date: map['date'],
+      streak: map['streak'],
+      isCheck: map['isCheck'],
+    );
   }
 }
